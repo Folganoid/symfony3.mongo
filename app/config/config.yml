@@ -10,6 +10,7 @@ parameters:
     locale: en
 
 framework:
+    translator: ~
     #esi: ~
     #translator: { fallbacks: ['%locale%'] }
     secret: '%secret%'
@@ -78,3 +79,11 @@ doctrine_mongodb:
     document_managers:
         default:
             auto_mapping: true
+
+fos_user:
+    db_driver: mongodb
+    firewall_name: main
+    user_class: AppBundle\Document\User
+    from_email:
+        address: anon@example.com
+        sender_name: Anonumous

@@ -1,0 +1,5 @@
+<h1>List</h1>
+
+{% for item in list %}
+    <dd><a href="{{ path('read_one', {'id': item.id}) }}">{{ item.id }}</a> - {{ item.name }} - {{ item.price }}</dd>
+{% endfor %}

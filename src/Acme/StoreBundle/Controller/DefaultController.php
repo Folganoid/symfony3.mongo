@@ -5,6 +5,10 @@ namespace Acme\StoreBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Acme\StoreBundle\Document\Product;
+use Symfony\Component\Form\Extension\Core\Type\MoneyType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class DefaultController extends Controller
@@ -18,35 +22,71 @@ class DefaultController extends Controller
     }
 
     /**
-     * @Route("/m")
-     */
-    public function createAction()
-    {
-        $product = new Product();
-        $product->setName('A Foo Bar');
-        $product->setPrice('19.99');
-
-        $dm = $this->get('doctrine_mongodb')->getManager();
-        $dm->persist($product);
-        $dm->flush();
-
-        return new Response('Created product id '.$product->getId());
-    }
-
-    /**
-     * @Route("/r/{id}")
+     * @Route("/read_one/{id}", name="read_one")
      */
     public function showAction($id)
     {
         $product = $this->get('doctrine_mongodb')
             ->getRepository('AcmeStoreBundle:Product')
-            ->find($id);
+            ->findOneById($id);
 
         if (!$product) {
             throw $this->createNotFoundException('No product found for id '.$id);
         }
 
-        return new Response(var_dump($product));
+        return new Response(dump($product));
     }
+
+    /**
+     * @Route("/read_all", name="read_all")
+     */
+    public function showAllAction()
+    {
+        $product = $this->get('doctrine_mongodb')
+            ->getRepository('AcmeStoreBundle:Product')
+            ->findAll();
+
+        if (!$product) {
+            throw $this->createNotFoundException('No products found');
+        }
+
+        return $this->render('AcmeStoreBundle:Default:alllist.html.twig', ['list' => $product]);
+    }
+
+
+    /**
+     * @Route("/add")
+     */
+    public function addAction(Request $request)
+    {
+
+        $product = new Product();
+        $product->setName('Enter name');
+        $product->setPrice(0.00);
+
+        $form = $this->createFormBuilder($product)
+            ->add('name', TextType::class)
+            ->add('price', MoneyType::class)
+            ->add('save', SubmitType::class, array('label' => 'Create Task'))
+            ->getForm();
+
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $product = $form->getData();
+
+            $dm = $this->get('doctrine_mongodb')->getManager();
+            $dm->persist($product);
+            $dm->flush();
+
+            return $this->redirectToRoute('read_all');
+        }
+
+
+        return $this->render('AcmeStoreBundle:Default:add.html.twig', ['form' => $form->createView()]);
+    }
+
+
 
 }

@@ -3,6 +3,7 @@
 namespace Acme\StoreBundle\Document;
 
 use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @MongoDB\Document
@@ -15,11 +16,14 @@ class Product
     protected $id;
 
     /**
+     * @Assert\NotBlank()
+     * @Assert\Length(min=3)
      * @MongoDB\Field(type="string")
      */
     protected $name;
 
     /**
+     * @Assert\NotNull()
      * @MongoDB\Field(type="float")
      */
     protected $price;
