@@ -87,3 +87,17 @@ fos_user:
     from_email:
         address: anon@example.com
         sender_name: Anonumous
+
+    registration:
+        confirmation:
+            enabled: true
+            from_email:
+                address: registration@example.com
+                sender_name: Demo Registration
+
+    resetting:
+            email:
+                from_email:
+                    address: resetting@example.com
+                    sender_name: Demo Resetting
+

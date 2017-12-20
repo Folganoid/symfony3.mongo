@@ -10,20 +10,25 @@
     <link rel="icon" href="favicon.ico">
     {% block stylesheets %}{% endblock %}
 
-    <title>{% block title %}Something Clever Here!{% endblock %}</title>
+    <title>{% block title %}Test app{% endblock %}</title>
 
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-    <!-- Latest compiled and minified JavaScript -->
+    <link rel="stylesheets" href="{{ asset('css/style.css') }}">
 
+    <!-- Latest compiled and minified JavaScript -->
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
+
 </head>
 
 <body>
+
+{% include '::topnav.html.twig' %}
+
 <div class="container">
     {% block content %}{% endblock %}
 </div>
@@ -36,3 +41,15 @@
 {% block javascripts %}{% endblock %}
 </body>
 </html>
+
+<style>
+
+    body {
+        padding-top: 70px;
+    }
+    .starter-template { /* rename this bit to whatever your content div is using */
+        padding: 40px 15px;
+        text-align: center;
+    }
+
+</style>
